@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "155642601196",
+    "project_id": "hello-quize",
+    "storage_bucket": "hello-quize.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155642601196:android:f511344d84fc8b3fb70fc9",
+        "android_client_info": {
+          "package_name": "com.example.hello_quize"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155642601196-3p603ck90217l6hektascn7rnk8npj5q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuUcA22UNFJrruF7-I83WczbdkqGNKm0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155642601196-3p603ck90217l6hektascn7rnk8npj5q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
