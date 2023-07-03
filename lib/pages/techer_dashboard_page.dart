@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/drawer.dart';
+import '../custom_widgets/quiz_info.dart';
 import 'create_quiz_page.dart';
 
 class TeacherDashboardPage extends StatefulWidget {
@@ -53,14 +54,37 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
           Row(
             children: [
               Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {}, child: Text('Create Class'))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                      height: 100,
+                      child: Text('Create Class',style: TextStyle(color: Colors.white,fontSize: 16),),
+                    ),
+                  )),
               Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
                         Navigator.pushNamed(context, CreateQuizPage.routeName);
+                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizInfo()));
                       },
-                      child: Text('Announce Quiz'))),
+                      child: Container(
+                        height: 100,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Text('Announce Quiz',style: TextStyle(color: Colors.white,fontSize: 16),),
+                      ),
+                    ),
+                  )),
             ],
           )
         ],

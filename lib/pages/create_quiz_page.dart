@@ -71,16 +71,16 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
             else {
               final loadedMessage=snapshot.data!.docs;
               print('loadedMessage ${loadedMessage}');
-              return ListView.builder(
-                padding: EdgeInsets.only(left: 14,right: 14,bottom: 40),
-                itemCount: loadedMessage.length,
-                itemBuilder: (context,index){
-                  final chatMessage=loadedMessage[index].data();
+              return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2
+                  ),
+                  itemCount: loadedMessage.length,
+                  itemBuilder: (context,index){
+                    final chatMessage=loadedMessage[index].data();
 
-                  return ListTile(
-                    title: Text(chatMessage['quizTitle']??''),);
-                },
-              );
+                    return Text(chatMessage['quizTitle']??'');
+                  });
             }
           }),
 
