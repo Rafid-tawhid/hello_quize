@@ -41,6 +41,10 @@ dependencies:
   cloud_firestore: ^4.8.0
   firebase_storage: ^11.2.2
   animated_expandable_fab: ^0.0.2
+  art_sweetalert: ^0.0.5
+  provider: ^6.0.5
+  image_picker: ^1.0.4
+
 
 dev_dependencies:
   flutter_test:

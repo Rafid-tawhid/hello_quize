@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:hello_quize/helper/auth_service.dart';
 import 'package:hello_quize/pages/create_quiz_page.dart';
 
 
@@ -148,7 +149,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextButton(
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
-                              Navigator.pushNamed(context, CreateQuizPage.routeName);
+
+                              // AuthSevice.loginUser('admin@gmail.com', '123456').then((value){
+                              //   print('THIS VAL IS $value');
+                              // });
+
+                             // Navigator.pushNamed(context, CreateQuizPage.routeName);
                             }
                           },
                           style: ButtonStyle(

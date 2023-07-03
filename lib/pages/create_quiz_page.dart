@@ -1,6 +1,17 @@
 import 'package:animated_expandable_fab/expandable_fab/action_button.dart';
 import 'package:animated_expandable_fab/expandable_fab/expandable_fab.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_quize/custom_widgets/multiple_questions.dart';
+import 'package:hello_quize/models/quiz_model.dart';
+
+import '../custom_widgets/image_questions.dart';
+import '../custom_widgets/true_false_questions.dart';
+import '../helper/db_helper.dart';
+import '../models/participent_model.dart';
 
 class CreateQuizPage extends StatefulWidget {
   const CreateQuizPage({Key? key}) : super(key: key);
@@ -30,47 +41,117 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    //DbHelper.getAllQuizInfo();
+    super.didChangeDependencies();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffFFFFFF),
       appBar: AppBar(
         title: Text('Make your Quiz'),
       ),
-      body: ListView.builder(
-        controller: _scroll_controller,
-        itemCount: widgetList.length,
-        itemBuilder: (context, index) {
-          final dynamic widgetItem = widgetList[index];
-          return InkWell(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
-              child: widgetItem,
-            ),
-          );
-        },
-      ),
-      floatingActionButton: ExpandableFab(
-        distance: 100,
-        openIcon: Icon(Icons.add),
-        closeIcon: Icon(Icons.close),
-        children: [
-          ActionButton(
-            child: Icon(Icons.format_list_bulleted),
-            color: Colors.white,
-            onPressed: QuestionWithTrueFalse,
-          ),
-          ActionButton(
-            child: Icon(Icons.image),
-            color: Colors.white,
-            onPressed: QuestionWithImage,
-          ),
-          ActionButton(
-            child: Icon(Icons.menu),
-            color: Colors.white,
-            onPressed: QuestionWithOptions,
-          ),
-        ],
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('Quizes').orderBy('time',descending: true).snapshots(),
+          builder: (context,snapshot){
+
+            if(snapshot.connectionState==ConnectionState.waiting){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            else if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No message..'),);
+            }
+            else if(snapshot.hasError){
+              return Center(child: Text('Something went wrong.'),);
+            }
+            else {
+              final loadedMessage=snapshot.data!.docs;
+              print('loadedMessage ${loadedMessage}');
+              return ListView.builder(
+                padding: EdgeInsets.only(left: 14,right: 14,bottom: 40),
+                itemCount: loadedMessage.length,
+                itemBuilder: (context,index){
+                  final chatMessage=loadedMessage[index].data();
+
+                  return ListTile(
+                    title: Text(chatMessage['quizTitle']??''),);
+                },
+              );
+            }
+          }),
+
+
+
+      // body: ListView.builder(
+      //   controller: _scroll_controller,
+      //   itemCount: widgetList.length,
+      //   itemBuilder: (context, index) {
+      //     final dynamic widgetItem = widgetList[index];
+      //     return InkWell(
+      //       child: Padding(
+      //         padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
+      //         child: widgetItem,
+      //       ),
+      //     );
+      //   },
+      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+          onPressed: (){
+        ArtSweetAlert.show(
+            context: context,
+            artDialogArgs: ArtDialogArgs(
+                title: "Which type of question you want to add ?",
+                confirmButtonText: 'Close',
+                confirmButtonColor: Color(0xffe1e1e1),
+
+                customColumns: [
+                  ElevatedButton(onPressed:(){
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, MultipleQuestions.routeName);
+                  }, child: Text('Multiple Question')),
+                  ElevatedButton(onPressed: (){
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, TrueFalseQuestions.routeName);
+                  }, child: Text('True/False')),
+                  ElevatedButton(onPressed: (){
+                    Navigator.pop(context);
+                    // final quiz=QuizModel('11', '22', 'RAFID', 'Test',
+                    //     Perticipents('0','name', '33','time').toMap(),
+                    //     questionList);
+                    //Navigator.pushNamed(context, ImageQuestions.routeName);
+                  }, child: Text('Image Question')),
+                  SizedBox(height: 20,)
+                ]
+            )
+        );
+      }),
+      // floatingActionButton: ExpandableFab(
+      //   distance: 100,
+      //   openIcon: Icon(Icons.add),
+      //   closeIcon: Icon(Icons.close),
+      //   children: [
+      //     ActionButton(
+      //       child: Icon(Icons.format_list_bulleted),
+      //       color: Colors.white,
+      //       onPressed: QuestionWithTrueFalse,
+      //     ),
+      //     ActionButton(
+      //       child: Icon(Icons.image),
+      //       color: Colors.white,
+      //       onPressed: QuestionWithImage,
+      //     ),
+      //     ActionButton(
+      //       child: Icon(Icons.menu),
+      //       color: Colors.white,
+      //       onPressed: QuestionWithOptions,
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -81,111 +162,7 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
     });
   }
 
-  void QuestionWithTrueFalse() {
-    setState(() {
-      widgetList.add(Card(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Question',
-                ),
-                maxLines: 3,
-              ),
-            ),
-            ListTile(
-              title: ListTile(
-                leading: Icon(Icons.circle_outlined),
-                title: Text('True'),
-              ),
-            ),
-            ListTile(
-              title: ListTile(
-                leading: Icon(Icons.circle_outlined),
-                title: Text('False'),
-              ),
-            ),
-            TextButton(onPressed: () {}, child: Text('Save'))
-          ],
-        ),
-      ));
-    });
-    _scrollDown();
-  }
 
-  void QuestionWithOptions() {
-    setState(() {
-      widgetList.add(Card(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Question',
-                ),
-                maxLines: 3,
-              ),
-            ),
-            for (var row in options)
-              ListTile(
-                title: ListTile(
-                  leading: Icon(Icons.circle_outlined),
-                  title: TextFormField(
-                    decoration: InputDecoration(labelText: 'Option $row'),
-                  ),
-                ),
-              ),
-            Align(
-                alignment: Alignment.bottomRight,
-                child: TextButton(
-                    onPressed: addOptions,
-                    child: Icon(Icons.add_circle_outline))),
-            TextButton(onPressed: () {}, child: Text('Save'))
-          ],
-        ),
-      ));
-    });
-    _scrollDown();
-  }
-
-  void QuestionWithImage() {
-    setState(() {
-      widgetList.add(Stack(
-        children: [
-          Card(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.image,
-                        size: 120,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Question',
-                        ),
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                TextButton(onPressed: () {}, child: Text('Save'))
-              ],
-            ),
-          ),
-          IconButton(onPressed: (){
-          }, icon: Icon(Icons.close))
-        ],
-      ));
-    });
-    _scrollDown();
-  }
 
   void removeItem(int index) {
     setState(() {
