@@ -16,7 +16,6 @@ class _CircularProgressIndicatorWithDialogState extends State<CircularProgressIn
       setState(() {
         _showProgress = false; // Hide the CircularProgressIndicator
       });
-
       // Show the AlertDialog
       showDialog(
         context: context,

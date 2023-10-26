@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_quize/helper/db_helper.dart';
 import 'package:hello_quize/models/question_model.dart';
 import 'package:hello_quize/models/quiz_model.dart';
+import 'package:hello_quize/provider/question_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/auth_service.dart';
@@ -22,6 +23,7 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   TextEditingController _questionsCon=TextEditingController();
   List<String> optionsList=[];
   late QuizProvider provider;
+  late QuestionProvider questionProvider;
   String correctAns='none';
   bool correctAnsB=false;
   String? quizId;
@@ -52,6 +54,7 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   @override
   void didChangeDependencies() {
     provider=Provider.of<QuizProvider>(context,listen: false);
+    questionProvider=Provider.of<QuestionProvider>(context,listen: false);
     quizId=ModalRoute.of(context)!.settings.arguments as String;
 
     super.didChangeDependencies();
@@ -63,6 +66,12 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Multiple Questions'),
+        actions: [
+          IconButton(onPressed: () async {
+
+            await questionProvider.getQuestionsByQuizId(quizId!);
+            Navigator.pop(context);}, icon: Icon(Icons.save))
+        ],
       ),
       body: ListView(
         children: [

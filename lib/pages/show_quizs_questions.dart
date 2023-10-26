@@ -3,6 +3,7 @@ import 'package:hello_quize/provider/question_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../custom_widgets/custom_circular_progressbar.dart';
+import '../custom_widgets/multiple_questions.dart';
 
 class QuizQuestions extends StatefulWidget {
   const QuizQuestions({super.key});
@@ -27,7 +28,11 @@ class _QuizQuestionsState extends State<QuizQuestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Questions'),),
+      appBar: AppBar(title: Text('Questions'),actions: [
+        IconButton(onPressed: (){
+          Navigator.pushNamed(context, MultipleQuestions.routeName,arguments: _quizId);
+        }, icon: Icon(Icons.add))
+      ],),
       body: Consumer<QuestionProvider>(
         builder: (context,provider,_){
           if(provider.questionList.isEmpty){
