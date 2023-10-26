@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hello_quize/provider/question_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../custom_widgets/custom_circular_progressbar.dart';
+
 class QuizQuestions extends StatefulWidget {
   const QuizQuestions({super.key});
   static const String routeName='/quiz_questions';
@@ -29,7 +31,7 @@ class _QuizQuestionsState extends State<QuizQuestions> {
       body: Consumer<QuestionProvider>(
         builder: (context,provider,_){
           if(provider.questionList.isEmpty){
-            return Center(child: CircularProgressIndicator(),);
+            return Center(child: CircularProgressIndicatorWithDialog(),);
           }
           else {
             return ListView(
