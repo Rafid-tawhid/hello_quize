@@ -22,7 +22,7 @@ class QuestionProvider extends ChangeNotifier{
     //DELETE QUESTIONS
     await FirebaseFirestore.instance.collection(DbHelper.QUIZ).doc(quizId).collection(DbHelper.QUESTIONS).doc(questionId).delete().then((value) {
 
-      print('DELETE SUCESS ...');
+      print('DELETE SUCCESS ...');
     });
 
   }
