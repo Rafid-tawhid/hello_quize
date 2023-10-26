@@ -124,34 +124,36 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
               child: IconButton(onPressed: addTextController,icon: Icon(Icons.add_circle_outline,color: Colors.blue,),)),
 
           ElevatedButton(onPressed: (){
-            _textControllers.forEach((element) {
-              print(element.text);
-              optionsList.add(element.text);
-            });
 
+            if(correctAns=='none'){
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select a right answer.')));
+            }
+            else {
+              _textControllers.forEach((element) {
+                print(element.text);
+                optionsList.add(element.text);
+              });
+              final qstn=Questions(question:_questionsCon.text ,type: 'M',number: '20',options: optionsList,correctAns: correctAns);
 
-            //final quiz=QuizModel(quiz_id: '1', time: DateTime.now().toString(), teacherName: 'rafid', teacherId: '11', quizTitle: 'Hey',quizDesc: 'Short questions');
+              provider.addQuestionsForQuize(quizId!,qstn).then((value) {
+                if(value==true){
+                  optionsList.clear();
 
-            final qstn=Questions(question:_questionsCon.text ,type: 'M',number: '20',options: optionsList,correctAns: correctAns);
-
-            provider.addQuestionsForQuize(quizId!,qstn).then((value) {
-              if(value==true){
-                optionsList.clear();
-
-                setState(() {
-                  _textControllers.forEach((element) {
-                    element.clear();
+                  setState(() {
+                    _textControllers.forEach((element) {
+                      element.clear();
+                    });
+                    _questionsCon.clear();
                   });
-                  _questionsCon.clear();
-                });
 
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Questions inserted successfully!')));
-              }
-              else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Something went wrong.')));
-              }
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Questions inserted successfully!')));
+                }
+                else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Something went wrong.')));
+                }
 
-            });
+              });
+            }
 
           }, child: Text('Save'))
         ]

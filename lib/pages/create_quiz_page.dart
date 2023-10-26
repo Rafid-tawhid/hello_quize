@@ -155,50 +155,38 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
 
 
 
-      // body: ListView.builder(
-      //   controller: _scroll_controller,
-      //   itemCount: widgetList.length,
-      //   itemBuilder: (context, index) {
-      //     final dynamic widgetItem = widgetList[index];
-      //     return InkWell(
-      //       child: Padding(
-      //         padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
-      //         child: widgetItem,
-      //       ),
-      //     );
-      //   },
-      // ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-          onPressed: (){
-        ArtSweetAlert.show(
-            context: context,
-            artDialogArgs: ArtDialogArgs(
-                title: "Which type of question you want to add ?",
-                confirmButtonText: 'Close',
-                confirmButtonColor: Color(0xffe1e1e1),
 
-                customColumns: [
-                  ElevatedButton(onPressed:(){
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, MultipleQuestions.routeName);
-                  }, child: Text('Multiple Question')),
-                  ElevatedButton(onPressed: (){
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, TrueFalseQuestions.routeName);
-                  }, child: Text('True/False')),
-                  ElevatedButton(onPressed: (){
-                    Navigator.pop(context);
-                    // final quiz=QuizModel('11', '22', 'RAFID', 'Test',
-                    //     Perticipents('0','name', '33','time').toMap(),
-                    //     questionList);
-                    //Navigator.pushNamed(context, ImageQuestions.routeName);
-                  }, child: Text('Image Question')),
-                  SizedBox(height: 20,)
-                ]
-            )
-        );
-      }),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //     onPressed: (){
+      //   ArtSweetAlert.show(
+      //       context: context,
+      //       artDialogArgs: ArtDialogArgs(
+      //           title: "Which type of question you want to add ?",
+      //           confirmButtonText: 'Close',
+      //           confirmButtonColor: Color(0xffe1e1e1),
+      //
+      //           customColumns: [
+      //             ElevatedButton(onPressed:(){
+      //               Navigator.pop(context);
+      //               Navigator.pushNamed(context, MultipleQuestions.routeName);
+      //             }, child: Text('Multiple Question')),
+      //             ElevatedButton(onPressed: (){
+      //               Navigator.pop(context);
+      //               Navigator.pushNamed(context, TrueFalseQuestions.routeName);
+      //             }, child: Text('True/False')),
+      //             ElevatedButton(onPressed: (){
+      //               Navigator.pop(context);
+      //               // final quiz=QuizModel('11', '22', 'RAFID', 'Test',
+      //               //     Perticipents('0','name', '33','time').toMap(),
+      //               //     questionList);
+      //               //Navigator.pushNamed(context, ImageQuestions.routeName);
+      //             }, child: Text('Image Question')),
+      //             SizedBox(height: 20,)
+      //           ]
+      //       )
+      //   );
+      // }),
       // floatingActionButton: ExpandableFab(
       //   distance: 100,
       //   openIcon: Icon(Icons.add),

@@ -8,6 +8,8 @@ import 'package:hello_quize/pages/create_quiz_page.dart';
 import 'package:hello_quize/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hello_quize/pages/show_quizs_questions.dart';
+import 'package:hello_quize/pages/student_quiz_code.dart';
+import 'package:hello_quize/pages/student_quiz_page.dart';
 import 'package:hello_quize/pages/techer_dashboard_page.dart';
 import 'package:hello_quize/pages/welcome_page.dart';
 import 'package:hello_quize/provider/question_provider.dart';
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
               return const WelcomePage();
             }
             if(snapshot.hasData){
-              return const TeacherDashboardPage();
+              return const WelcomePage();
             }
             else {
               return const AuthScreen();
@@ -64,6 +66,8 @@ class MyApp extends StatelessWidget {
           TrueFalseQuestions.routeName: (context)=>TrueFalseQuestions(),
           ImageQuestions.routeName: (context)=>ImageQuestions(),
           QuizQuestions.routeName: (context)=>QuizQuestions(),
+          StudentQuizCode.routeName: (context)=>StudentQuizCode(),
+          StudentQuizPage.routeName: (context)=>StudentQuizPage(),
         },
       ),
     );
