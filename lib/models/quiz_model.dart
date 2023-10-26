@@ -30,15 +30,12 @@ Map<String,dynamic> toMap(){
   }
   //
   QuizModel.fromMap(dynamic map) {
-
     quiz_id=map['quiz_id'];
     time=map['time'];
     teacherName=map['teacherName'];
     teacherId=map['teacherId'];
     quizTitle=map['quizTitle'];
     quizDesc=map['quizDesc'];
-
-
   }
 
 

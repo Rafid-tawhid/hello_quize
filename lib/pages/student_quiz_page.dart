@@ -48,43 +48,36 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 6.0),
                         child: Card(
-                            child: ListTile(
-                              title: Row(
-                                children: [
-                                  Text('${index+1}. ',style: TextStyle(fontSize: 16),),
-                                  Text(question.question ?? ''),
-                                ],
-                              ),
-                              onLongPress: () async {
-
-                                showDialog(
-                                    context: context,
-                                    builder: (context)=>AlertDialog(
-                                      title: Text('Delete Question'),
-                                      content: Text('Are you sure you want to delete this question?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text('Cancel'),
-                                          onPressed: () {
-                                            // Close the dialog
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: Text('Delete'),
-                                          onPressed: () async {
-                                            //DELETE QUESTIONS
-                                            await provider.deleteQuestionById(_quizId, question.questionId!);
-
-                                            //get all questions
-                                            await  provider.getQuestionsByQuizId(_quizId);
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    ));
-
-                              },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  title: Row(
+                                    children: [
+                                      Text('${index+1}. ',style: TextStyle(fontSize: 16),),
+                                      Text(question.question ?? ''),
+                                    ],
+                                  ),
+                                ),
+                                ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: question.options.length,
+                                  itemBuilder: (context,index){
+                                    var correctAns;
+                                    return ListTile(
+                                      onTap: (){
+                                        correctAns=question.options[index];
+                                        setState(() {
+                                          correctAns=question.options[index];
+                                        });
+                                      },
+                                      tileColor: correctAns==question.options[index]?Colors.green:Colors.white,
+                                      leading: Icon(Icons.circle_outlined),
+                                      title: Text(question.options[index]??''),);
+                                  },
+                                )
+                              ],
                             )),
                       );
                     }
@@ -96,3 +89,5 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
 
   }
 }
+
+
