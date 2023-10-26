@@ -16,17 +16,14 @@ class DbHelper {
     return snapshot.exists;
   }
 
-  static Future<bool> addQuizAndQuestions(QuizModel quizModel,Questions questions) async {
+  static Future<bool> addQuizAndQuestions(String quizId,Questions questions) async {
     try {
       // Get the Firestore instance
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       // Create a new document reference with an auto-generated ID
-      DocumentReference docRef = firestore.collection(QUIZ).doc();
+      DocumentReference docRef = firestore.collection(QUIZ).doc(quizId);
       // Create the second document reference with another auto-generated ID
-      quizModel.quiz_id=docRef.id;
-      await docRef.set(quizModel.toMap());
-
 
       CollectionReference colRef2=docRef.collection(QUESTIONS);
       DocumentReference docRef2 = colRef2.doc();
@@ -34,7 +31,7 @@ class DbHelper {
       questions.questionId=docRef2.id;
       await docRef2.set(questions.toMap());
 
-      print('Data inserted successfully!');
+      print('Questions inserted successfully!');
       return true;
 
 

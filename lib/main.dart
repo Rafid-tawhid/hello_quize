@@ -7,8 +7,10 @@ import 'package:hello_quize/pages/auth_page.dart';
 import 'package:hello_quize/pages/create_quiz_page.dart';
 import 'package:hello_quize/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hello_quize/pages/show_quizs_questions.dart';
 import 'package:hello_quize/pages/techer_dashboard_page.dart';
 import 'package:hello_quize/pages/welcome_page.dart';
+import 'package:hello_quize/provider/question_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_widgets/multiple_questions.dart';
@@ -28,7 +30,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context)=>QuizProvider())
+        ChangeNotifierProvider(create: (context)=>QuizProvider()),
+        ChangeNotifierProvider(create: (context)=>QuestionProvider()),
       ],
       child: MaterialApp(
         title: 'Hello Quize',
@@ -60,6 +63,7 @@ class MyApp extends StatelessWidget {
           MultipleQuestions.routeName: (context)=>MultipleQuestions(),
           TrueFalseQuestions.routeName: (context)=>TrueFalseQuestions(),
           ImageQuestions.routeName: (context)=>ImageQuestions(),
+          QuizQuestions.routeName: (context)=>QuizQuestions(),
         },
       ),
     );

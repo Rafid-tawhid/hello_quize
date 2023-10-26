@@ -24,7 +24,7 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   late QuizProvider provider;
   String correctAns='none';
   bool correctAnsB=false;
-
+  String? quizId;
   @override
   void dispose() {
     // Dispose all the text controllers when the widget is disposed
@@ -52,8 +52,8 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   @override
   void didChangeDependencies() {
     provider=Provider.of<QuizProvider>(context,listen: false);
-    final arguments=ModalRoute.of(context)!.settings.arguments as String;
-    print('THIS IS QUIZ ID ${arguments}');
+    quizId=ModalRoute.of(context)!.settings.arguments as String;
+
     super.didChangeDependencies();
   }
 
@@ -121,11 +121,11 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
             });
 
 
-            final quiz=QuizModel(quiz_id: '1', time: DateTime.now().toString(), teacherName: 'rafid', teacherId: '11', quizTitle: 'Hey',quizDesc: 'Short questions');
+            //final quiz=QuizModel(quiz_id: '1', time: DateTime.now().toString(), teacherName: 'rafid', teacherId: '11', quizTitle: 'Hey',quizDesc: 'Short questions');
 
             final qstn=Questions(question:_questionsCon.text ,type: 'M',number: '20',options: optionsList,correctAns: correctAns);
 
-            provider.addQuestionsForQuize(quiz,qstn).then((value) {
+            provider.addQuestionsForQuize(quizId!,qstn).then((value) {
               if(value==true){
                 optionsList.clear();
 

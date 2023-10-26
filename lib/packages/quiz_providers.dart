@@ -6,7 +6,7 @@ import 'package:hello_quize/models/quiz_model.dart';
 class QuizProvider extends ChangeNotifier {
   List<QuizModel> quizModelList=[];
   List<Questions> questionsList=[];
-  Future<bool> addQuestionsForQuize(QuizModel quizModel,Questions questions)=>DbHelper.addQuizAndQuestions(quizModel, questions);
+  Future<bool> addQuestionsForQuize(String quizId,Questions questions)=>DbHelper.addQuizAndQuestions(quizId, questions);
 
   Future<void> getAllQuestionsInfo() async {
     print('This is called');

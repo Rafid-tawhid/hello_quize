@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_quize/custom_widgets/multiple_questions.dart';
+import 'package:hello_quize/models/question_model.dart';
 import 'package:hello_quize/models/quiz_model.dart';
+import 'package:hello_quize/pages/show_quizs_questions.dart';
 
 import '../custom_widgets/image_questions.dart';
 import '../custom_widgets/quiz_info.dart';
@@ -26,6 +28,7 @@ class CreateQuizPage extends StatefulWidget {
 class _CreateQuizPageState extends State<CreateQuizPage> {
   List<String> options = [''];
   List<Widget> widgetList = [];
+  List<Questions> questionsList = [];
   final ScrollController _scroll_controller = ScrollController();
 
     void _scrollDown() {
@@ -55,7 +58,7 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
     return Scaffold(
       backgroundColor: Color(0xffFFFFFF),
       appBar: AppBar(
-        title: Text('Make your Quiz'),
+        title: Text('Create your Quiz'),
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('Quizes').orderBy('time',descending: true).snapshots(),
@@ -114,21 +117,32 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
                     );
                   } else {
                     // Render regular items from loadedMessage
-                    final chatMessage = loadedMessage[index - 1].data();
-                    return Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.blue.shade100,
-                      ),
-                      child: SizedBox(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(chatMessage['quizTitle'] ?? ''),
-                            SizedBox(height: 4,),
-                            Text(HelperFunctions.getDate(chatMessage['time']))
-                          ],
+                    final quizInfo = loadedMessage[index - 1].data();
+                    return InkWell(
+                      onTap: () async {
+
+                      Navigator.pushNamed(context, QuizQuestions.routeName,arguments:quizInfo['quiz_id'] );
+
+
+                       print('questionsList ${questionsList.length}');
+
+
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.blue.shade100,
+                        ),
+                        child: SizedBox(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(quizInfo['quizTitle'] ?? ''),
+                              SizedBox(height: 4,),
+                              Text(HelperFunctions.getDate(quizInfo['time']))
+                            ],
+                          ),
                         ),
                       ),
                     );

@@ -4,7 +4,7 @@ class Questions {
   String type='';
   String? question='';
   String number='';
-  List<String> options=[];
+  List<dynamic> options=[];
   String correctAns='';
 
   Questions({this.question, this.questionId,this.quizId,required this.type,required this.number,required this.options,required this.correctAns});
