@@ -16,4 +16,14 @@ class QuestionProvider extends ChangeNotifier{
     });
     notifyListeners();
   }
+
+  Future<void> deleteQuestionById(String quizId, String questionId) async {
+    print('DELETE CALLED.. ');
+    //DELETE QUESTIONS
+    await FirebaseFirestore.instance.collection(DbHelper.QUIZ).doc(quizId).collection(DbHelper.QUESTIONS).doc(questionId).delete().then((value) {
+
+      print('DELETE SUCESS ...');
+    });
+
+  }
 }
