@@ -2,7 +2,7 @@ import 'package:hello_quize/models/participent_model.dart';
 import 'package:hello_quize/models/question_model.dart';
 
 class QuizModel {
-  String quiz_id='';
+  String? quiz_id='';
   String time='';
   String teacherName='';
   String teacherId='';
@@ -10,8 +10,7 @@ class QuizModel {
   String quizDesc='';
 
   QuizModel(
-      {
-      required  this.quiz_id,
+      {this.quiz_id,
      required this.time,
      required this.teacherName,
      required this.teacherId,

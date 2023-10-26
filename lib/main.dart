@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hello_quize/custom_widgets/image_questions.dart';
 import 'package:hello_quize/packages/quiz_providers.dart';
 import 'package:hello_quize/pages/auth_page.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Hello Quize',
+        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

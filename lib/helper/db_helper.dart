@@ -44,6 +44,28 @@ class DbHelper {
     }
   }
 
+
+  static Future<String?> addQuizInfo(QuizModel quizModel) async {
+    try {
+      // Get the Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Create a new document reference with an auto-generated ID
+      DocumentReference docRef = firestore.collection(QUIZ).doc();
+      // Create the second document reference with another auto-generated ID
+      quizModel.quiz_id=docRef.id;
+      await docRef.set(quizModel.toMap());
+
+      print('Data inserted successfully!');
+      return quizModel.quiz_id;
+
+
+    } catch (error) {
+      print('Error inserting data: $error');
+      return null;
+    }
+  }
+
   static Future<void> getAllQuizInfo() async {
     // Get a reference to the "Quizes" collection
     CollectionReference quizCollectionRef = _db.collection('Quizes');

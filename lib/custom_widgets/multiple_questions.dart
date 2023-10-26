@@ -52,6 +52,8 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   @override
   void didChangeDependencies() {
     provider=Provider.of<QuizProvider>(context,listen: false);
+    final arguments=ModalRoute.of(context)!.settings.arguments as String;
+    print('THIS IS QUIZ ID ${arguments}');
     super.didChangeDependencies();
   }
 

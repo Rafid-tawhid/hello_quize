@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../custom_widgets/drawer.dart';
 import '../custom_widgets/quiz_info.dart';
+import '../models/user_model.dart';
 import 'create_quiz_page.dart';
 
 class TeacherDashboardPage extends StatefulWidget {
@@ -35,6 +36,14 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
                     return Icon(Icons.ac_unit);
                   }
                   if(snapshot.hasData){
+
+                    //set current user info
+                    UserAllInfo.setUserInfo(UserModel(
+                        FirebaseAuth.instance.currentUser!.uid,
+                        snapshot.data!['username'],
+                        snapshot.data!['image_url'],
+                        snapshot.data!['email']));
+
                     return ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.network(snapshot.data!['image_url'],height: 36,width: 36,fit: BoxFit.cover,));

@@ -9,8 +9,10 @@ import 'package:hello_quize/custom_widgets/multiple_questions.dart';
 import 'package:hello_quize/models/quiz_model.dart';
 
 import '../custom_widgets/image_questions.dart';
+import '../custom_widgets/quiz_info.dart';
 import '../custom_widgets/true_false_questions.dart';
 import '../helper/db_helper.dart';
+import '../helper/helper_func.dart';
 import '../models/participent_model.dart';
 
 class CreateQuizPage extends StatefulWidget {
@@ -70,17 +72,70 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
             }
             else {
               final loadedMessage=snapshot.data!.docs;
+
               print('loadedMessage ${loadedMessage}');
               return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2
-                  ),
-                  itemCount: loadedMessage.length,
-                  itemBuilder: (context,index){
-                    final chatMessage=loadedMessage[index].data();
+                padding: EdgeInsets.all(6),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 6,
+                ),
+                itemCount: loadedMessage.length + 1, // Add one for the custom item
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    // Render your custom grid item here
+                    return Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.green.shade100, // Customize the color
+                      ),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizInfo()));
+                        },
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add,size: 40,),
+                              Text(
+                                'Create New',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Render regular items from loadedMessage
+                    final chatMessage = loadedMessage[index - 1].data();
+                    return Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.blue.shade100,
+                      ),
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(chatMessage['quizTitle'] ?? ''),
+                            SizedBox(height: 4,),
+                            Text(HelperFunctions.getDate(chatMessage['time']))
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
 
-                    return Text(chatMessage['quizTitle']??'');
-                  });
             }
           }),
 
