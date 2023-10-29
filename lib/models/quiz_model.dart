@@ -2,15 +2,21 @@ import 'package:hello_quize/models/participent_model.dart';
 import 'package:hello_quize/models/question_model.dart';
 
 class QuizModel {
-  String quiz_id='';
+  String? quiz_id='';
   String time='';
   String teacherName='';
   String teacherId='';
   String quizTitle='';
   String quizDesc='';
 
-  QuizModel(this.quiz_id, this.time, this.teacherName, this.teacherId,
-      this.quizTitle, this.quizDesc);
+  QuizModel(
+      {this.quiz_id,
+     required this.time,
+     required this.teacherName,
+     required this.teacherId,
+     required this.quizTitle,
+     required this.quizDesc,
+      });
 
 Map<String,dynamic> toMap(){
     final map=<String,dynamic>{};

@@ -6,11 +6,15 @@ import 'package:hello_quize/models/quiz_model.dart';
 class QuizProvider extends ChangeNotifier {
   List<QuizModel> quizModelList=[];
   List<Questions> questionsList=[];
-  Future<bool> addQuestionsForQuize(QuizModel quizModel,Questions questions)=>DbHelper.addQuizAndQuestions(quizModel, questions);
+  Future<bool> addQuestionsForQuize(String quizId,Questions questions)=>DbHelper.addQuizAndQuestions(quizId, questions);
 
   Future<void> getAllQuestionsInfo() async {
-    DbHelper.getAllQuizInfo().listen((event) {
-      //questionsList=List.generate(event.data().length, (index) => null);
-    });
+    print('This is called');
+    // DbHelper.getAllQuizInfo().listen((event) {
+    //   print(event.toString());
+    //   quizModelList=List.generate(event.data()!.length, (index) => QuizModel.fromMap(QuizModel.fromMap(event)));
+    // });
+
+    print('questionsList ${quizModelList.length}');
   }
 }

@@ -43,6 +43,10 @@ dependencies:
   animated_expandable_fab: ^0.0.2
   art_sweetalert: ^0.0.5
   provider: ^6.0.5
+  image_picker: ^1.0.4
+  intl: ^0.18.1
+  flutter_easyloading: ^3.0.5
+
 
 dev_dependencies:
   flutter_test:

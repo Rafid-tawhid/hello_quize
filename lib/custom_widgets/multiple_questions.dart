@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_quize/helper/db_helper.dart';
 import 'package:hello_quize/models/question_model.dart';
 import 'package:hello_quize/models/quiz_model.dart';
+import 'package:hello_quize/provider/question_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/auth_service.dart';
@@ -22,9 +23,10 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   TextEditingController _questionsCon=TextEditingController();
   List<String> optionsList=[];
   late QuizProvider provider;
+  late QuestionProvider questionProvider;
   String correctAns='none';
   bool correctAnsB=false;
-
+  String? quizId;
   @override
   void dispose() {
     // Dispose all the text controllers when the widget is disposed
@@ -52,6 +54,9 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
   @override
   void didChangeDependencies() {
     provider=Provider.of<QuizProvider>(context,listen: false);
+    questionProvider=Provider.of<QuestionProvider>(context,listen: false);
+    quizId=ModalRoute.of(context)!.settings.arguments as String;
+
     super.didChangeDependencies();
   }
 
@@ -61,6 +66,12 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Multiple Questions'),
+        actions: [
+          IconButton(onPressed: () async {
+
+            await questionProvider.getQuestionsByQuizId(quizId!);
+            Navigator.pop(context);}, icon: Icon(Icons.save))
+        ],
       ),
       body: ListView(
         children: [
@@ -118,11 +129,12 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
               optionsList.add(element.text);
             });
 
-            final quiz=QuizModel('1', DateTime.now().toString(), 'teacherName', '11', 'Hello', 'Shot qstn');
+
+            //final quiz=QuizModel(quiz_id: '1', time: DateTime.now().toString(), teacherName: 'rafid', teacherId: '11', quizTitle: 'Hey',quizDesc: 'Short questions');
 
             final qstn=Questions(question:_questionsCon.text ,type: 'M',number: '20',options: optionsList,correctAns: correctAns);
 
-            provider.addQuestionsForQuize(quiz,qstn).then((value) {
+            provider.addQuestionsForQuize(quizId!,qstn).then((value) {
               if(value==true){
                 optionsList.clear();
 

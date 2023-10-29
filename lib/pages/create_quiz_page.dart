@@ -1,12 +1,20 @@
 import 'package:animated_expandable_fab/expandable_fab/action_button.dart';
 import 'package:animated_expandable_fab/expandable_fab/expandable_fab.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_quize/custom_widgets/multiple_questions.dart';
+import 'package:hello_quize/models/question_model.dart';
 import 'package:hello_quize/models/quiz_model.dart';
+import 'package:hello_quize/pages/show_quizs_questions.dart';
 
 import '../custom_widgets/image_questions.dart';
+import '../custom_widgets/quiz_info.dart';
 import '../custom_widgets/true_false_questions.dart';
+import '../helper/db_helper.dart';
+import '../helper/helper_func.dart';
 import '../models/participent_model.dart';
 
 class CreateQuizPage extends StatefulWidget {
@@ -20,6 +28,7 @@ class CreateQuizPage extends StatefulWidget {
 class _CreateQuizPageState extends State<CreateQuizPage> {
   List<String> options = [''];
   List<Widget> widgetList = [];
+  List<Questions> questionsList = [];
   final ScrollController _scroll_controller = ScrollController();
 
     void _scrollDown() {
@@ -37,25 +46,128 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    //DbHelper.getAllQuizInfo();
+    super.didChangeDependencies();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffFFFFFF),
       appBar: AppBar(
-        title: Text('Make your Quiz'),
+        title: Text('Create your Quiz'),
       ),
-      body: ListView.builder(
-        controller: _scroll_controller,
-        itemCount: widgetList.length,
-        itemBuilder: (context, index) {
-          final dynamic widgetItem = widgetList[index];
-          return InkWell(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
-              child: widgetItem,
-            ),
-          );
-        },
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('Quizes').orderBy('time',descending: true).snapshots(),
+          builder: (context,snapshot){
+
+            if(snapshot.connectionState==ConnectionState.waiting){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            else if(snapshot.data!.docs.isEmpty){
+              return Center(child: Text('No message..'),);
+            }
+            else if(snapshot.hasError){
+              return Center(child: Text('Something went wrong.'),);
+            }
+            else {
+              final loadedMessage=snapshot.data!.docs;
+
+              print('loadedMessage ${loadedMessage}');
+              return GridView.builder(
+                padding: EdgeInsets.all(6),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 6,
+                ),
+                itemCount: loadedMessage.length + 1, // Add one for the custom item
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    // Render your custom grid item here
+                    return Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.green.shade100, // Customize the color
+                      ),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizInfo()));
+                        },
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add,size: 40,),
+                              Text(
+                                'Create New',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Render regular items from loadedMessage
+                    final quizInfo = loadedMessage[index - 1].data();
+                    return InkWell(
+                      onTap: () async {
+
+                      Navigator.pushNamed(context, QuizQuestions.routeName,arguments:quizInfo['quiz_id'] );
+
+
+                       print('questionsList ${questionsList.length}');
+
+
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.blue.shade100,
+                        ),
+                        child: SizedBox(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(quizInfo['quizTitle'] ?? ''),
+                              SizedBox(height: 4,),
+                              Text(HelperFunctions.getDate(quizInfo['time']))
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
+
+            }
+          }),
+
+
+
+      // body: ListView.builder(
+      //   controller: _scroll_controller,
+      //   itemCount: widgetList.length,
+      //   itemBuilder: (context, index) {
+      //     final dynamic widgetItem = widgetList[index];
+      //     return InkWell(
+      //       child: Padding(
+      //         padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
+      //         child: widgetItem,
+      //       ),
+      //     );
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
           onPressed: (){

@@ -16,25 +16,22 @@ class DbHelper {
     return snapshot.exists;
   }
 
-  static Future<bool> addQuizAndQuestions(QuizModel quizModel,Questions questions) async {
+  static Future<bool> addQuizAndQuestions(String quizId,Questions questions) async {
     try {
       // Get the Firestore instance
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       // Create a new document reference with an auto-generated ID
-      DocumentReference docRef = firestore.collection('Quizes').doc();
+      DocumentReference docRef = firestore.collection(QUIZ).doc(quizId);
       // Create the second document reference with another auto-generated ID
-      quizModel.quiz_id=docRef.id;
-      await docRef.set(quizModel.toMap());
 
-
-      CollectionReference colRef2=docRef.collection('Questions');
+      CollectionReference colRef2=docRef.collection(QUESTIONS);
       DocumentReference docRef2 = colRef2.doc();
       questions.quizId=docRef.id;
       questions.questionId=docRef2.id;
       await docRef2.set(questions.toMap());
 
-      print('Data inserted successfully!');
+      print('Questions inserted successfully!');
       return true;
 
 
@@ -44,7 +41,47 @@ class DbHelper {
     }
   }
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getAllQuizInfo() => _db.collection(QUIZ).doc(QUESTIONS).snapshots();
+
+  static Future<String?> addQuizInfo(QuizModel quizModel) async {
+    try {
+      // Get the Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Create a new document reference with an auto-generated ID
+      DocumentReference docRef = firestore.collection(QUIZ).doc();
+      // Create the second document reference with another auto-generated ID
+      quizModel.quiz_id=docRef.id;
+      await docRef.set(quizModel.toMap());
+
+      print('Data inserted successfully!');
+      return quizModel.quiz_id;
+
+
+    } catch (error) {
+      print('Error inserting data: $error');
+      return null;
+    }
+  }
+
+  static Future<void> getAllQuizInfo() async {
+    // Get a reference to the "Quizes" collection
+    CollectionReference quizCollectionRef = _db.collection('Quizes');
+
+// Query the collection to get all documents
+    QuerySnapshot quizQuerySnapshot = await quizCollectionRef.get();
+
+    quizQuerySnapshot.docs.forEach((quizDoc) {
+      // Access the data of each document using the data() method
+      Object? quizData = quizDoc.data();
+
+      // Perform actions with the retrieved data
+      String quizId = quizDoc.id;
+      print(quizData.toString());
+      // ... other properties
+
+      print('Quiz ID: $quizId');
+    });
+  }
 
 
   
