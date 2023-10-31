@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hello_quize/custom_widgets/temp_db.dart';
-
 import '../helper/db_helper.dart';
 import '../models/question_model.dart';
 
 import 'package:hello_quize/models/question_model.dart';
+
+import '../models/result_model.dart';
 
 
 
 
 class QuestionProvider extends ChangeNotifier{
   final List<Questions> questionList=[];
+
 
   getQuestionsByQuizId(String quizId) async {
     questionList.clear();
