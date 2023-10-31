@@ -157,7 +157,8 @@ class _AuthScreenState extends State<AuthScreen> {
          await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
            'username':_username,
            'email': _email,
-           'image_url': imageUrl
+           'image_url': imageUrl,
+           'role':'student'
          });
 
         }

@@ -26,8 +26,8 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: FutureBuilder(
-                future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
                 builder: (context,snapshot){
                   if(snapshot.hasError){
                     return Icon(Icons.supervised_user_circle);
@@ -36,7 +36,7 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
                     return Icon(Icons.ac_unit);
                   }
                   if(snapshot.hasData){
-
+                    print('DATAS ${snapshot.data!['username']}');
                     //set current user info
                     UserAllInfo.setUserInfo(UserModel(
                         FirebaseAuth.instance.currentUser!.uid,
@@ -49,7 +49,6 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
                         child: Image.network(snapshot.data!['image_url'],height: 36,width: 36,fit: BoxFit.cover,));
                   }
                   else {
-
                     return Icon(Icons.disabled_by_default_outlined);
                   }
                 }),

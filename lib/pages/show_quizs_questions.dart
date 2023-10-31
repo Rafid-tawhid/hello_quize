@@ -44,50 +44,60 @@ class _QuizQuestionsState extends State<QuizQuestions> {
         body: Consumer<QuestionProvider>(
           builder: (context, provider, _) {
             if (provider.questionList.isEmpty) {
-              return Center(
-                child: CircularProgressIndicatorWithDialog(),
-              );
+              return Center(child: Text('No questions added.'));
             } else {
-              return ListView(
-                children: provider.questionList
-                    .map((question) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                          child: Card(
-                              child: ListTile(
-                            title: Text(question.question ?? ''),
-                                onLongPress: () async {
+              return ListView.builder(
+                itemCount: provider.questionList.length,
+                itemBuilder: (context,index){
+                  if(provider.questionList.isEmpty){
+                    return Center(child: Text('No questions added.'));
+                  }
+                  else {
+                    final question=provider.questionList[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      child: Card(
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Text('${index+1}. ',style: TextStyle(fontSize: 16),),
+                                Text(question.question ?? ''),
+                              ],
+                            ),
+                            onLongPress: () async {
 
-                                  showDialog(
-                                      context: context,
-                                      builder: (context)=>AlertDialog(
-                                        title: Text('Delete Question'),
-                                        content: Text('Are you sure you want to delete this question?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('Cancel'),
-                                            onPressed: () {
-                                              // Close the dialog
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('Delete'),
-                                            onPressed: () async {
-                                              //DELETE QUESTIONS
-                                              await provider.deleteQuestionById(_quizId, question.questionId!);
+                              showDialog(
+                                  context: context,
+                                  builder: (context)=>AlertDialog(
+                                    title: Text('Delete Question'),
+                                    content: Text('Are you sure you want to delete this question?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancel'),
+                                        onPressed: () {
+                                          // Close the dialog
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Delete'),
+                                        onPressed: () async {
+                                          //DELETE QUESTIONS
+                                          await provider.deleteQuestionById(_quizId, question.questionId!);
 
-                                              //get all questions
-                                             await  provider.getQuestionsByQuizId(_quizId);
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      ));
+                                          //get all questions
+                                          await  provider.getQuestionsByQuizId(_quizId);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ));
 
-                                },
+                            },
                           )),
-                        ))
-                    .toList(),
+                    );
+                  }
+                }
               );
             }
           },

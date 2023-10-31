@@ -8,6 +8,7 @@ class DbHelper {
   static const String collectionName='Admins';
   static FirebaseFirestore _db=FirebaseFirestore.instance;
   static String QUIZ='Quizes';
+  static String USERS='users';
   static String QUESTIONS='Questions';
   static String PARTICIPIENT='Perticipients';
 
