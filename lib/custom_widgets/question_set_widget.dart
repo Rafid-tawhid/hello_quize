@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_quize/custom_widgets/temp_db.dart';
 import 'package:hello_quize/models/question_model.dart';
 
 

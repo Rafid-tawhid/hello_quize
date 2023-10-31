@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hello_quize/custom_widgets/temp_db.dart';
-import 'package:hello_quize/models/user_model.dart';
-import 'package:hello_quize/provider/radio_provider.dart';
+import 'package:hello_quize/pages/result_page.dart';
+
 import 'package:provider/provider.dart';
 
 import '../custom_widgets/question_set_widget.dart';
 import '../models/question_answer_model.dart';
+import '../models/result_model.dart';
 import '../provider/question_provider.dart';
 
 class StudentQuizPage extends StatefulWidget {
@@ -23,6 +23,7 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
   late String _quizId;
   late QuestionProvider provider;
   List<QuestionAnswerModel> questionAnswerList=[];
+  List<ResultModel> resultList=[];
   int? questionIndex;
 
   @override
@@ -38,6 +39,11 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
     return  Scaffold(
         appBar: AppBar(
         title: Text('Quiz Name'),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.pushNamed(context, ResultList.routeNmae,arguments: resultList);
+            }, icon: Icon(Icons.done_all))
+          ],
       ),
       body: Consumer<QuestionProvider>(
         builder: (context,provider,_)=>ListView.builder(
@@ -49,10 +55,15 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
               map: question,
               index: index,
               onAnswered: (value) {
-                provider.questionList[index].correctAns = value;
-                provider.questionList.forEach((element) {
-                  print(element.correctAns);
-                });
+                // provider.questionList[index].correctAns = value;
+                print(value);
+
+                resultList.add(ResultModel(
+                    question.question??'',
+                    question.correctAns,
+                    value,
+                    question.correctAns==value?1:0));
+
               },
             );
           },
