@@ -13,6 +13,7 @@ import 'package:hello_quize/pages/student_quiz_page.dart';
 import 'package:hello_quize/pages/techer_dashboard_page.dart';
 import 'package:hello_quize/pages/welcome_page.dart';
 import 'package:hello_quize/provider/question_provider.dart';
+import 'package:hello_quize/provider/radio_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_widgets/multiple_questions.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context)=>QuizProvider()),
         ChangeNotifierProvider(create: (context)=>QuestionProvider()),
+        ChangeNotifierProvider(create: (context)=>RadioProvider(0)),
       ],
       child: MaterialApp(
         title: 'Hello Quize',

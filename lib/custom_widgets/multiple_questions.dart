@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_quize/helper/db_helper.dart';
 import 'package:hello_quize/models/question_model.dart';
@@ -70,7 +71,18 @@ class _MultipleQuestionsState extends State<MultipleQuestions> {
           IconButton(onPressed: () async {
 
             await questionProvider.getQuestionsByQuizId(quizId!);
-            Navigator.pop(context);}, icon: Icon(Icons.save))
+            showDialog(context: context, builder:(context)=>
+                AlertDialog(
+                  content: Text(quizId??''),
+                  title: Text('share this code to join'),
+                  actions: [
+                    ElevatedButton(onPressed: (){
+                      FlutterClipboard.copy(quizId!).then(( value ) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('copied the code'))));
+                    }, child: Text('Copy'))
+                  ],
+                ));
+
+            }, icon: Icon(Icons.save))
         ],
       ),
       body: ListView(

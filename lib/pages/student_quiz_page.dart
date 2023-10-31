@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hello_quize/custom_widgets/temp_db.dart';
 import 'package:hello_quize/models/user_model.dart';
+import 'package:hello_quize/provider/radio_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../custom_widgets/question_set_widget.dart';
 import '../models/question_answer_model.dart';
 import '../provider/question_provider.dart';
 
@@ -19,7 +22,8 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
 
   late String _quizId;
   late QuestionProvider provider;
-  List<String> questionAnswerList=[];
+  List<QuestionAnswerModel> questionAnswerList=[];
+  int? questionIndex;
 
   @override
   void didChangeDependencies() {
@@ -32,69 +36,98 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         title: Text('Quiz Name'),
       ),
-        body: Consumer<QuestionProvider>(
-          builder: (context, provider, _) {
-            if (provider.questionList.isEmpty) {
-              return Center(child: Text('No questions added.'));
-            } else {
-              return ListView.builder(
-                itemCount: provider.questionList.length,
-                itemBuilder: (context, index) {
-                  if (provider.questionList.isEmpty) {
-                    return Center(child: Text('No questions added.'));
-                  } else {
-                    final question = provider.questionList[index];
-                    List<bool> optionSelected = List.filled(question.options.length, false); // Move this line here
+      body: Consumer<QuestionProvider>(
+        builder: (context,provider,_)=>ListView.builder(
+          itemCount: provider.questionList.length,
+          itemBuilder: (context,index){
+            final question = provider.questionList[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              title: Row(
-                                children: [
-                                  Text('${index + 1}. ', style: TextStyle(fontSize: 16),),
-                                  Text(question.question ?? ''),
-                                ],
-                              ),
-                            ),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: question.options.length,
-                              itemBuilder: (context, index2) {
-                                return ListTile(
-                                  onTap: () {
-                                    if(!questionAnswerList.contains(question.options[index2])){
-                                      questionAnswerList.add(question.options[index2]);
-                                    }
-                                    else{
-                                      questionAnswerList.remove(question.options[index2]);
-                                    }
-                                    setState(() {});
-                                  },
-                                  tileColor: questionAnswerList.contains(question.options[index2]) ? Colors.blue : Colors.white,
-                                  leading: Icon(Icons.circle_outlined),
-                                  title: Text(question.options[index2] ?? ''),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                },
-              );
-
-            }
+            return QuestionSetView(
+              map: question,
+              index: index,
+              onAnswered: (value) {
+                provider.questionList[index].correctAns = value;
+                provider.questionList.forEach((element) {
+                  print(element.correctAns);
+                });
+              },
+            );
           },
-        ));
+        ),
+      ),
+
+
+      // body: Consumer<QuestionProvider>(
+      //   builder: (context, provider, _) {
+      //     if (provider.questionList.isEmpty) {
+      //       return Center(child: Text('No questions added.'));
+      //     } else {
+      //       int? selectedValue;
+      //       return ListView.builder(
+      //         itemCount: provider.questionList.length,
+      //         itemBuilder: (context, index) {
+      //           if (provider.questionList.isEmpty) {
+      //             return Center(child: Text('No questions added.'));
+      //           } else {
+      //             final question = provider.questionList[index];
+      //             // Store the selected radio button value
+      //             int? selectedValue;
+      //             return Padding(
+      //               padding: const EdgeInsets.symmetric(horizontal: 6.0),
+      //               child: Card(
+      //                 child: Column(
+      //                   mainAxisSize: MainAxisSize.min,
+      //                   children: [
+      //                     ListTile(
+      //                       title: Row(
+      //                         children: [
+      //                           Text('${index + 1}. ', style: TextStyle(fontSize: 16),),
+      //                           Text(question.question ?? ''),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                     ListView.builder(
+      //                       physics: NeverScrollableScrollPhysics(),
+      //                       shrinkWrap: true,
+      //                       itemCount: question.options.length,
+      //                       itemBuilder: (context, index2) {
+      //                         return Consumer<RadioProvider>(
+      //                           builder: (context,provider,_)=>RadioListTile(
+      //                             value: index2,
+      //                             groupValue: provider.selectedValue,
+      //                             onChanged: (value) {
+      //                               selectedValue = value;
+      //                               provider.selectedValue=value!;
+      //
+      //                                 selectedValue = index2;
+      //                                 questionIndex=index;
+      //                                 print('selectedValue ${selectedValue}');// Select the item when tapped
+      //                                 print('questionIndex ${questionIndex}');// Select the item when tapped
+      //
+      //                             },
+      //                             title: Text(question.options[index2]),
+      //                           ),
+      //                         );
+      //                       },
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ),
+      //             );
+      //           }
+      //         },
+      //       );
+      //
+      //     }
+      //   },
+      // )
+
+    );
+
+
 
   }
 
@@ -102,3 +135,12 @@ class _StudentQuizPageState extends State<StudentQuizPage> {
 }
 
 
+//    questionAnswerList.forEach((element) {
+//      if(element.question==question.options[index2]){
+//        questionAnswerList.removeWhere((element) => element.question==question.options[index2]);
+//      }
+//      else {
+//        questionAnswerList.add(QuestionAnswerModel(question.question??'',
+//            question.correctAns, question.options[index2]));
+//      }
+//    });

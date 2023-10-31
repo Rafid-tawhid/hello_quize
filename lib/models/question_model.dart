@@ -6,7 +6,8 @@ class Questions {
   String number='';
   List<dynamic> options=[];
   String correctAns='';
-  bool isSelected=false;
+  String givenAns='';
+
 
   Questions({this.question, this.questionId,this.quizId,required this.type,required this.number,required this.options,required this.correctAns});
 
